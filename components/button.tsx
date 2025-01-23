@@ -18,6 +18,7 @@ const buttonVariants = cva(
           "text-gray-a11 hover:bg-gray-a4 hover:text-gray-12 focus-visible:ring-gray-a7 focus-visible:ring-2",
       },
       size: {
+        small: "h-6 rounded-md px-2 text-xs gap-1",
         medium: "h-[30px] rounded-md px-3 text-sm gap-1.5",
         large: "h-9 px-4 py-2 gap-1.5",
       },
@@ -42,7 +43,7 @@ const buttonVariants = cva(
       size: "medium",
       iconOnly: false,
     },
-  }
+  },
 );
 
 export interface ButtonProps
@@ -55,7 +56,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, variant, size, iconOnly, asChild = false, ...props }, ref) => {
     const Comp = asChild ? Slot : "button";
     return <Comp className={cn(buttonVariants({ variant, size, className, iconOnly }))} ref={ref} {...props} />;
-  }
+  },
 );
 Button.displayName = "Button";
 

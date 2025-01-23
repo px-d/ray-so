@@ -1,5 +1,5 @@
 import { useAtom, useSetAtom } from "jotai";
-import React, { useEffect } from "react";
+import React, { useEffect, useMemo } from "react";
 import { themeAtom, THEMES, Theme, unlockedThemesAtom } from "../store/themes";
 import ControlContainer from "./ControlContainer";
 
@@ -17,7 +17,8 @@ import {
   SelectValue,
 } from "@/components/select";
 import { SelectItemText } from "@radix-ui/react-select";
-import { ChevronUpIcon } from "@raycast/icons";
+import { ChevronLeftIcon, ChevronRightIcon, ChevronUpIcon } from "@raycast/icons";
+import { Button } from "@/components/button";
 
 const ThemeControl: React.FC = () => {
   const [currentTheme, atomSetTheme] = useAtom(themeAtom);
@@ -66,8 +67,10 @@ const ThemeControl: React.FC = () => {
     [],
   );
 
+  const allThemes = useMemo(() => [...partnerThemes, ...themes], [partnerThemes, themes]);
+
   return (
-    <ControlContainer title="Theme">
+    <ControlContainer title={`Theme: ${currentTheme.name}`}>
       <Select
         value={`${currentTheme.name}`}
         onValueChange={(value) => {
@@ -75,9 +78,33 @@ const ThemeControl: React.FC = () => {
           setTheme(theme);
         }}
       >
+        <Button
+          size={"small"}
+          className="mr-2"
+          title="Previous Theme"
+          onClick={() => {
+            const currentIndex = allThemes.findIndex((theme) => theme.id === currentTheme.id);
+            const prevIndex = (currentIndex - 1 + allThemes.length) % allThemes.length;
+            setTheme(allThemes[prevIndex]);
+          }}
+        >
+          <ChevronLeftIcon />
+        </Button>
         <SelectTrigger size="small" className="w-[60px]" icon={ChevronUpIcon}>
           <SelectValue />
         </SelectTrigger>
+        <Button
+          size={"small"}
+          className="ml-2"
+          title="Next Theme"
+          onClick={() => {
+            const currentIndex = allThemes.findIndex((theme) => theme.id === currentTheme.id);
+            const nextIndex = (currentIndex + 1) % allThemes.length;
+            setTheme(allThemes[nextIndex]);
+          }}
+        >
+          <ChevronRightIcon />
+        </Button>
         <SelectContent>
           <SelectGroup>
             <SelectLabel>Partners</SelectLabel>
